@@ -94,6 +94,8 @@ app.delete("/api/songs/:id", (req, res) => {
 app.get("/api/playlists", (req, res) => {
   res.json(playlists);
 });
-app.listen(5000, () => {
-  console.log("Backend running on http://localhost:5000");
+// Gunakan process.env.PORT agar server Cloud bisa menentukan port sendiri
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
 });
