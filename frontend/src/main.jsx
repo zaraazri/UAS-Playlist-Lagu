@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 
-const API_BASE = import.meta.env.DEV ? "http://localhost:5000" : "";
+const API_BASE = import.meta.env.VITE_API_URL || "";
 
 const App = () => {
   const [songs, setSongs] = useState([]);
