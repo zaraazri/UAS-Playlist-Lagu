@@ -29,15 +29,15 @@ app.post("/api/login", (req, res) => {
   res.json({ token });
 });
 
-// Endpoint GET - Disamakan menggunakan /api/songs agar sinkron dengan fitur baru
+// Endpoint GET - Mengambil semua lagu
 app.get("/api/songs", (req, res) => {
   res.json(songs);
 });
+
 // Tambah Lagu + Otomatis masuk Playlist
 app.post("/api/songs", (req, res) => {
   const newId = Date.now();
   const song = { id: newId, ...req.body };
- // Masukkan ke daftar lagu
   songs.push(song);
   // Otomatis masukkan ke daftar playlist sidebar
   playlists.push({ 
@@ -48,12 +48,11 @@ app.post("/api/songs", (req, res) => {
   res.json(song);
 });
 
-// FITUR BARU: EDIT (PUT)
+// FITUR EDIT (PUT)
 app.put("/api/songs/:id", (req, res) => {
   const { id } = req.params;
   const index = songs.findIndex(s => s.id === parseInt(id));
   if (index !== -1) {
-    // Memperbarui data lagu yang ada
     songs[index] = { ...songs[index], ...req.body };
     res.json(songs[index]);
   } else {
@@ -61,37 +60,14 @@ app.put("/api/songs/:id", (req, res) => {
   }
 });
 
-// FITUR BARU: HAPUS (DELETE)
+// FITUR HAPUS (DELETE)
 app.delete("/api/songs/:id", (req, res) => {
   const { id } = req.params;
   songs = songs.filter(s => s.id !== parseInt(id));
   res.json({ message: "Lagu berhasil dihapus" });
-});
-// 1. Endpoint untuk mengambil semua playlist (untuk sidebar)
-app.get("/api/playlists", (req, res) => {
-  res.json(playlists);
 });
 
-// 2. Endpoint untuk EDIT lagu (Update)
-app.put("/api/songs/:id", (req, res) => {
-  const { id } = req.params;
-  const index = songs.findIndex(s => s.id === parseInt(id));
-  
-  if (index !== -1) {
-    // Memperbarui data lagu tanpa merubah ID
-    songs[index] = { ...songs[index], ...req.body };
-    res.json(songs[index]);
-  } else {
-    res.status(404).json({ message: "Lagu tidak ditemukan" });
-  }
-});
-// 3. Endpoint untuk HAPUS lagu (Delete)
-app.delete("/api/songs/:id", (req, res) => {
-  const { id } = req.params;
-  songs = songs.filter(s => s.id !== parseInt(id));
-  res.json({ message: "Lagu berhasil dihapus" });
-});
-// --- ENDPOINT PLAYLISTS ---
+// Endpoint untuk mengambil semua playlist
 app.get("/api/playlists", (req, res) => {
   res.json(playlists);
 });

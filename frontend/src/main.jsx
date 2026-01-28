@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 
+const API_BASE = import.meta.env.DEV ? "http://localhost:5000" : "";
+
 const App = () => {
   const [songs, setSongs] = useState([]);
   const [playlists, setPlaylists] = useState([]);
@@ -13,8 +15,8 @@ const App = () => {
   const [editingId, setEditingId] = useState(null);
 
   const refreshData = () => {
-    fetch("http://localhost:5000/api/songs").then(res => res.json()).then(data => setSongs(data));
-    fetch("http://localhost:5000/api/playlists").then(res => res.json()).then(data => setPlaylists(data));
+    fetch(`${API_BASE}/api/songs`).then(res => res.json()).then(data => setSongs(data));
+    fetch(`${API_BASE}/api/playlists`).then(res => res.json()).then(data => setPlaylists(data));
   };
 
   useEffect(() => { refreshData(); }, []);
@@ -24,7 +26,7 @@ const App = () => {
     const username = prompt("Masukkan Username Admin:");
     if (!username) return;
 
-    fetch("http://localhost:5000/api/login", {
+    fetch(`${API_BASE}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username })
@@ -46,7 +48,7 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const method = editingId ? "PUT" : "POST";
-    const url = editingId ? `http://localhost:5000/api/songs/${editingId}` : "http://localhost:5000/api/songs";
+    const url = editingId ? `${API_BASE}/api/songs/${editingId}` : `${API_BASE}/api/songs`;
 
     fetch(url, {
       method: method,
@@ -61,7 +63,7 @@ const App = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Hapus lagu ini?")) {
-      fetch(`http://localhost:5000/api/songs/${id}`, { method: "DELETE" }).then(() => refreshData());
+      fetch(`${API_BASE}/api/songs/${id}`, { method: "DELETE" }).then(() => refreshData());
     }
   };
 
