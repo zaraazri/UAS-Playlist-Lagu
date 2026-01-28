@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 
-const API_BASE = import.meta.env.VITE_API_URL || "";
+// Tentukan API_BASE berdasarkan environment
+const API_BASE = (() => {
+  const env = import.meta.env.VITE_API_URL;
+  // Jika ada value dari env variable, gunakan itu
+  if (env) return env;
+  // Jika di localhost, gunakan localhost:5000
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:5000';
+  }
+  // Jika di production, gunakan relative URL (same domain)
+  return '';
+})();
 
 const App = () => {
   const [songs, setSongs] = useState([]);
